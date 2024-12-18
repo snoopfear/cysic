@@ -1,3 +1,19 @@
+#!/bin/bash
+
+# Обновление системы
+echo "Обновление системы..."
+sudo apt update && sudo apt upgrade -y
+
+# Установка screen и nano
+echo "Установка screen и nano..."
+sudo apt install -y screen nano
+
+# Путь к entrypoint.sh
+ENTRYPOINT_FILE="/app/entrypoint.sh"
+
+# Замена содержимого entrypoint.sh
+echo "Обновление содержимого entrypoint.sh..."
+sudo bash -c "cat > $ENTRYPOINT_FILE" <<'EOF'
 #!/bin/sh
 
 # Проверка наличия EVM_ADDR
@@ -45,3 +61,14 @@ while true; do
     # Задержка перед повторным запуском
     sleep 5
 done
+EOF
+
+# Сделать entrypoint.sh исполняемым
+echo "Делаем файл entrypoint.sh исполняемым..."
+sudo chmod +x $ENTRYPOINT_FILE
+
+# Вывод инструкций на экран
+echo
+echo "Все готово! Для запуска выполните следующие команды:"
+echo "1. screen -S prover"
+echo "2. $ENTRYPOINT_FILE 0x1145699b4e433530Ca39DFf9536ba544fd82a0b4"
