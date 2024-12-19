@@ -4,6 +4,30 @@
 echo "Обновляем систему..."
 sudo apt update && sudo apt upgrade -y
 
+# Создание файла подкачки
+echo "Создаём файл подкачки..."
+sudo fallocate -l 5G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# Проверка, что файл подкачки добавлен
+if sudo swapon --show | grep -q "/swapfile"; then
+    echo "Файл подкачки успешно создан и активирован."
+else
+    echo "Ошибка при создании файла подкачки."
+    exit 1
+fi
+
+# Добавление в /etc/fstab для сохранения после перезагрузки
+echo "Добавляем файл подкачки в /etc/fstab..."
+if ! grep -q "/swapfile" /etc/fstab; then
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    echo "Файл подкачки добавлен в /etc/fstab."
+else
+    echo "Файл подкачки уже добавлен в /etc/fstab."
+fi
+
 # Запрос переменной (reward wallet)
 read -p "Введите адрес вашего reward wallet (например, 0x123...): " REWARD_WALLET
 
