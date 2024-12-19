@@ -71,4 +71,4 @@ sudo chmod +x $ENTRYPOINT_FILE
 echo
 echo "Все готово! Для запуска выполните следующие команды:"
 echo "1. screen -S prover"
-echo "2. $ENTRYPOINT_FILE 0x1145699b4e433530Ca39DFf9536ba544fd82a0b4"
+echo "2. $ENTRYPOINT_FILE "
